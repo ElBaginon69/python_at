@@ -1,7 +1,5 @@
-from sys import flags
 
-
-test = ['p', 'u', 'b', 'l', 'i', 'c', ' ', 'C', 'l', 'a', 's', 's', ' ', 'H', 'o', 'l', 'a', 's','{','}']
+test = ['p', 'u', 'b', 'l', 'i', 'c', ' ', 'C', 'l', 'a', 's', 's', ' ', 'H', 'o', 'l', 'a', 's','{', '\n', '}']
 
 
 automata ={
@@ -75,28 +73,22 @@ automata ={
         ('Q14', 'y'):'Q14',
         ('Q14', 'z'):'Q14',
         ('Q14', '{'):'Q15',
-        ('Q15', '\n'):'Q16',
-        ('Q16', '\n'):'Q16',
-        ('Q16', '}'):'Q17',
-        ('Q15', '}'):'Q17',
-        
-        
+        ('Q15', '\n'):'Q15',
+        ('Q15', '}'):'Q16'      
     },
 
     'estate' :[
-        'Q0', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16'
+        'Q0', 'Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16',
     ],
 
     'lenguage': [
         'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q', 
         'R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h',
         'i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y',
-        'z','{','}', ' '
+        'z','{','}', ' ', '\n'
     ]
 
 }
-
-
 
 #print(delta.get(('Q0', 'P')))
 
@@ -110,38 +102,44 @@ def validation(a,b):#funcion que evalua si existe el o los caracteres dentro del
     
 def estate_validation(a):#Valida el estado de la función validation
     if a==False:
-        return True
+        return True #retorno si la transición no es válida
     else:
-        return False
+        return False #retorno si la transición es válida
     
     
 def bucle_state(p, q, c): #funcion para evaluar estados que se encuentren en bucle
-    if p == q:
-        return c
+    if p != q and p != automata['Final']:
+        
+        return c+1 #retorna el valor de la posición sin iterar
     else:
-        return c+1
+        return c #retorna el valor de la posición iterado
 
 def test_array(a): #funcion que evaluará el texto Java
     pos = 0
-    for index in a:
+    
+    for index in a: #bucle para evaluar la lista del archivo txt
         
-        #print(validation(state[pos],index))
+        #print(validation(state[pos],index), index)
         #print(index)
         #print("P",state[pos])
-        if estate_validation(validation(state[pos],index)):
+        if estate_validation(validation(state[pos],index)): #llamada de funcion estate_validation para ser evaluada si cumple
             break     
-        pos = bucle_state(validation(state[pos], index), state[pos], pos)
+        pos = bucle_state(validation(state[pos], index), state[pos], pos) #asigno la nueva posicion del array de los estados
         #print("P",pos)
-        print(index)
+        #print(index)
+    print("Hola")
+    print(index)
+    print("Pos",state[pos])
     print(validation(state[pos], index))
+    #print(pos)
     return validation(state[pos], index)
         
     
 def final(a):
-    if a == automata['Final']:
+    #print(a)    
+    if a in automata['Final']:
         return "Cumple"
-    else:
-        return "No cumple"
+    
 
 #print(validation(d, 'B'))
 
@@ -149,10 +147,14 @@ def final(a):
 #print(test[0])
 state = automata['estate']
 
+print("VALIDACION", test_array(test))
 
-a = 'P'
-print(test_array(test))
-print(final(test_array(test)))
+try:
+    #print(test_array(test))
+    print(final(test_array(test)))
+except:
+    print("NO CUMPLE")
+    
 
     
     
